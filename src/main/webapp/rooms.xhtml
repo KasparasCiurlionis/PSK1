@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head/>
+<h:body>
+    <h2>Players reserved in #{playersForRoom.room.name} room:</h2>
+    <ol>
+        <ui:repeat value="#{playersForRoom.room.manyToMany}" var="player">
+            <li>
+                <h:link value="#{player.name} #{player.jerseyNumber}" outcome="playerDetails?playerId=#{player.id}" />
+            </li>
+        </ui:repeat>
+    </ol>
+    <h:form>
+        <ol>
+            <ui:repeat value="#{playersForRoom.allPlayers}" var="player">
+                <li><h:link value="#{player.name}"  /></li> <!-- outcome="players?teamId=#{team.id}" -->
+            </ui:repeat>
+        </ol>
+    </h:form>
+    <h:link outcome="index" value="Back to teams page"/>
+</h:body>
+</html>
