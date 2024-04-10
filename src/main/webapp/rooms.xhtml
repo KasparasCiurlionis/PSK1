@@ -7,20 +7,25 @@
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head/>
 <h:body>
-    <h2>Players reserved in #{playersForRoom.room.name} room:</h2>
+    <h2>Members reserved in #{membersForRoom.room.name} room:</h2>
     <ol>
-        <ui:repeat value="#{playersForRoom.room.manyToMany}" var="player">
+        <ui:repeat value="#{membersForRoom.room.members}" var="member">
             <li>
-                <h:link value="#{player.name} #{player.jerseyNumber}" outcome="playerDetails?playerId=#{player.id}" />
+                <h:link value="#{member.name}" outcome="playerDetails?playerId=#{member.id}" />
             </li>
         </ui:repeat>
     </ol>
+
     <h:form>
-        <ol>
-            <ui:repeat value="#{playersForRoom.allPlayers}" var="player">
-                <li><h:link value="#{player.name}"  /></li> <!-- outcome="players?teamId=#{team.id}" -->
-            </ui:repeat>
-        </ol>
+        <h:selectOneMenu value="#{membersForRoom.selectedID}">
+            <f:selectItems value="#{membersForRoom.allMembers}" var="c"
+                           itemLabel="#{c.name}" itemValue="#{c.id}"/>
+        </h:selectOneMenu>
+        <h:commandButton value="Add member to the room"
+                         actionListener="#{membersForRoom.addMember()}"
+                         action="#{'rooms?faces-redirect=true&amp;roomId='.concat(membersForRoom.room.id)}">
+            <f:param name="roomId" value="#{membersForRoom.room.id}" />
+        </h:commandButton>
     </h:form>
     <h:link outcome="index" value="Back to teams page"/>
 </h:body>

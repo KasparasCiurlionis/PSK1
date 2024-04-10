@@ -2,13 +2,11 @@ package lt.vu.usecases;
 
 import lombok.Getter;
 import lombok.Setter;
-import lt.vu.entities.Player;
+import lt.vu.entities.Member;
 import lt.vu.entities.Room;
-import lt.vu.entities.Team;
 import lt.vu.interceptors.LoggedInvocation;
-import lt.vu.persistence.PlayersDAO;
+import lt.vu.persistence.MembersDAO;
 import lt.vu.persistence.RoomsDAO;
-import lt.vu.persistence.TeamsDAO;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
@@ -20,26 +18,29 @@ import java.util.List;
 import java.util.Map;
 
 @Model
-public class PlayersForRoom implements Serializable {
+public class MembersForRoom implements Serializable {
 
     @Inject
     private RoomsDAO roomsDAO;
 
     @Inject
-    private PlayersDAO playersDAO;
+    private MembersDAO membersDAO;
 
     @Getter @Setter
     private Room room;
 
     @Getter
-    private List<Player> allPlayers;
+    private List<Member> allMembers;
 
     @Getter @Setter
-    private Player playerToCreate = new Player();
+    private Member member;
+
+    @Getter @Setter
+    private int selectedID;
 
     @PostConstruct
     public void init() {
-        loadAllPlayers();
+        loadAllMembers();
         Map<String, String> requestParameters =
                 FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer roomId = Integer.parseInt(requestParameters.get("roomId"));
@@ -48,12 +49,15 @@ public class PlayersForRoom implements Serializable {
 
     @Transactional
     @LoggedInvocation
-    public void createPlayer() {
-        //playerToCreate.setManyToMany(this.room);
-        //playersDAO.persist(playerToCreate);
+    public void addMember() {
+        member =membersDAO.findOne(selectedID);
+        member.getRooms().add(this.room);
+        this.room.getMembers().add(member);
+        membersDAO.merge(member);
+        roomsDAO.merge(this.room);
     }
 
-    private void loadAllPlayers(){
-        this.allPlayers = playersDAO.loadAll();
+    private void loadAllMembers(){
+        this.allMembers = membersDAO.loadAll();
     }
 }

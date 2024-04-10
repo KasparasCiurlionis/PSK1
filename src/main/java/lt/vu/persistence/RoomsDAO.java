@@ -1,8 +1,6 @@
 package lt.vu.persistence;
 
-import lt.vu.entities.Player;
 import lt.vu.entities.Room;
-import lt.vu.entities.Team;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,6 +15,9 @@ public class RoomsDAO {
 
     public void persist(Room room){
         this.em.persist(room);
+    }
+    public void merge(Room room){
+        this.em.merge(room);
     }
 
     public Room findOne(Integer id){

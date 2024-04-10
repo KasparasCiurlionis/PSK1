@@ -21,13 +21,30 @@ public class Team {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer id;
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    @Basic
     private String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @OneToMany(mappedBy = "team")
-    private List<Player> players = new ArrayList<>();
+    private List<Member> members = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

@@ -10,26 +10,26 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
+import lt.vu.entities.Member;
 import lt.vu.interceptors.LoggedInvocation;
-import lt.vu.persistence.PlayersDAO;
+import lt.vu.persistence.MembersDAO;
 import lt.vu.persistence.TeamsDAO;
-import lt.vu.entities.Player;
 import lt.vu.entities.Team;
 
 @Model
-public class PlayersForTeam implements Serializable {
+public class MembersForTeam implements Serializable {
 
     @Inject
     private TeamsDAO teamsDAO;
 
     @Inject
-    private PlayersDAO playersDAO;
+    private MembersDAO membersDAO;
 
     @Getter @Setter
     private Team team;
 
     @Getter @Setter
-    private Player playerToCreate = new Player();
+    private Member memberToCreate = new Member();
 
     @PostConstruct
     public void init() {
@@ -40,10 +40,11 @@ public class PlayersForTeam implements Serializable {
     }
 
     @Transactional
-    @LoggedInvocation
-    public void createPlayer() {
-        playerToCreate.setTeam(this.team);
-        playersDAO.persist(playerToCreate);
+    public void createMember() {
+        memberToCreate.setTeam(this.team);
+        membersDAO.persist(memberToCreate);
     }
+
+
 
 }

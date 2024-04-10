@@ -13,6 +13,7 @@ import java.util.List;
 @Table(name = "ROOM")
 @Getter @Setter
 public class Room {
+
     @Id
     @GeneratedValue
     private Integer id;
@@ -25,20 +26,6 @@ public class Room {
         return id;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "Reservation",
-            joinColumns = @JoinColumn(name = "roomId"),
-            inverseJoinColumns = @JoinColumn(name = "playerId"))
-    private List<Player> manyToMany;
-
-    public List<Player> getManyToMany() {
-        return manyToMany;
-    }
-
-    public void setManyToMany(List<Player> manyToMany) {
-        this.manyToMany = manyToMany;
-    }
 
     @Basic
     private String name;
@@ -49,5 +36,16 @@ public class Room {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @ManyToMany(mappedBy = "rooms")
+    private List<Member> members;
+
+    public List<Member> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }
